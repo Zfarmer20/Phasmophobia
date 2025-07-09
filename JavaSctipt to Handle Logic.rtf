@@ -1,0 +1,69 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2639
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 const ghosts = [\
+    \{ name: "Spirit", evidence: ["ghost writing", "EMF Level 5", "spirit box"] \},\
+    \{ name: "Wraith", evidence: ["fingerprints", "freezing temperatures"] \},\
+    \{ name: "Phantom", evidence: ["photo", "EMF Level 5", "spirit box"] \},\
+    \{ name: "Poltergeist", evidence: ["ghost writing", "fingerprints", "spirit box"] \},\
+    \{ name: "Banshee", evidence: ["EMF Level 5", "freezing temperatures"] \},\
+    \{ name: "Jinn", evidence: ["ghost orbs", "EMF Level 5", "spirit box"] \},\
+    \{ name: "Mare", evidence: ["ghost orbs", "freezing temperatures", "spirit box"] \},\
+    \{ name: "Revenant", evidence: ["ghost orbs", "fingerprints"] \},\
+    \{ name: "Shade", evidence: ["ghost writing", "fingerprints"] \},\
+    \{ name: "Demon", evidence: ["ghost writing", "spirit box", "freezing temperatures"] \},\
+    \{ name: "Yurei", evidence: ["ghost orbs", "freezing temperatures", "ghost writing"] \},\
+    \{ name: "Oni", evidence: ["ghost orbs", "EMF Level 5", "spirit box"] \},\
+    \{ name: "Goryo", evidence: ["ghost orbs", "fingerprints"] \},\
+    \{ name: "Myling", evidence: ["EMF Level 5", "ghost writing"] \},\
+    \{ name: "Twin", evidence: ["ghost orbs", "freezing temperatures"] \},\
+    \{ name: "Raiju", evidence: ["ghost orbs", "fingerprints", "EMF Level 5"] \},\
+    \{ name: "Hantu", evidence: ["freezing temperatures", "fingerprints", "ghost writing"] \},\
+];\
+// Dynamically generate evidence options\
+const evidenceContainer = document.getElementById('evidence-options');\
+const uniqueEvidence = new Set();\
+ghosts.forEach(ghost => \{\
+    ghost.evidence.forEach(evidence => uniqueEvidence.add(evidence));\
+\});\
+uniqueEvidence.forEach(evidence => \{\
+    const label = document.createElement('label');\
+    const checkbox = document.createElement('input');\
+    \
+    checkbox.type = 'checkbox';\
+    checkbox.value = evidence;\
+    label.appendChild(checkbox);\
+    label.appendChild(document.createTextNode(evidence));\
+    evidenceContainer.appendChild(label);\
+    evidenceContainer.appendChild(document.createElement('br'));\
+\});\
+// Filtering function\
+function filterGhosts(selectedEvidence) \{\
+    return ghosts.filter(ghost =>\
+        selectedEvidence.every(evidence => ghost.evidence.includes(evidence))\
+    );\
+\}\
+// Handling the click event\
+document.getElementById('submit-evidence').addEventListener('click', () => \{\
+    const selectedEvidence = [...document.querySelectorAll('#evidence-options input:checked')]\
+        .map(checkbox => checkbox.value);\
+    \
+    const possibleGhosts = filterGhosts(selectedEvidence);\
+    const resultsContainer = document.getElementById('results');\
+    resultsContainer.innerHTML = '';\
+    \
+    if (possibleGhosts.length > 0) \{\
+        possibleGhosts.forEach(ghost => \{\
+            const listItem = document.createElement('li');\
+            listItem.textContent = ghost.name;\
+            resultsContainer.appendChild(listItem);\
+        \});\
+    \} else \{\
+        resultsContainer.innerHTML = '<li>No ghosts match the selected evidence.</li>';\
+    \}\
+\});\
+}
